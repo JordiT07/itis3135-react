@@ -2,13 +2,10 @@ import React from "react";
 
 export default function Contract() {
   return (
-    <section className="content">
+    <div>
       <h2>Course Contract</h2>
-      <p>
-        I, <strong>Jordi Trejo</strong>, agree to abide by the terms of the course contract in my ITIS 3135 Web Development class. 
-        I understand that all work I submit must be my own, and I will maintain the highest standards of academic integrity.
-      </p>
-      <p>Date: November 2025</p>
-    </section>
+      <p>I, Jordi Trejo, agree to abide by the terms of the course contract in my Fall 2025 ITIS3135 course with Professor D.I. von Briesen. All work posted online will be appropriate, and I will not copy code from classmates except where properly credited.</p>
+      <p><em>Signed: Jordi Trejo, 08/31/2025</em></p>
+    </div>
   );
 }

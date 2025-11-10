@@ -1,43 +1,147 @@
+/* Reset and Base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   font-family: Arial, sans-serif;
-  margin: 0;
-  background-color: #f4f6f8;
-  color: #0a0a0a;
-  text-align: center;
+  background-color: #f4f4f9;
+  color: #333;
 }
 
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header Styles */
 header {
-  background-color: #001f3f;
+  background-color: #004080;
   color: white;
-  padding: 1em;
+  text-align: center;
+  padding: 15px;
 }
 
-.nav {
+header h1 {
+  font-family: Georgia, serif;
+  color: white;
+  margin-bottom: 10px;
+  font-size: 2em;
+}
+
+header nav ul {
   list-style: none;
   padding: 0;
   display: flex;
   justify-content: center;
-  gap: 1em;
+  flex-wrap: wrap;
+  gap: 0;
 }
 
-.nav a {
+header nav li {
+  margin: 0;
+}
+
+header nav a {
   color: white;
   text-decoration: none;
-  padding: 0.5em 1em;
-  border-radius: 5px;
+  margin: 0 10px;
+  font-weight: bold;
+  display: inline-block;
+  padding: 5px 0;
 }
 
-.nav a:hover {
-  background-color: #00509e;
+header nav a:hover {
+  text-decoration: underline;
 }
 
+/* Main Content */
 main {
-  padding: 2em;
+  flex: 1;
+  padding: 20px;
+  max-width: 900px;
+  width: 90%;
+  min-width: 320px;
+  margin: 20px auto;
+  background-color: #fff;
 }
 
+main h2 {
+  font-family: 'Trebuchet MS', sans-serif;
+  color: #0073e6;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+main p {
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+main ul {
+  line-height: 1.6;
+  margin-bottom: 15px;
+  padding-left: 40px;
+}
+
+main img {
+  display: block;
+  margin: 20px auto;
+  border-radius: 10px;
+  max-width: 200px;
+}
+
+main strong {
+  color: #004080;
+}
+
+main em {
+  font-style: italic;
+}
+
+/* Footer Styles */
 footer {
-  background-color: #001f3f;
+  background-color: #004080;
   color: white;
-  padding: 1em;
-  margin-top: 2em;
+  text-align: center;
+  padding: 15px;
+  margin-top: auto;
+}
+
+footer p {
+  margin: 5px 0;
+}
+
+footer a {
+  color: white;
+  text-decoration: none;
+  margin: 0 5px;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media screen and (max-width: 600px) {
+  body {
+    background-color: #eaeaea;
+  }
+
+  main {
+    width: 95%;
+    font-size: 0.95rem;
+  }
+
+  header nav a {
+    display: block;
+    margin: 8px 0;
+  }
+
+  header, footer {
+    padding: 10px;
+  }
 }

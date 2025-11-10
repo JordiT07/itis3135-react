@@ -2,13 +2,10 @@ import React from "react";
 
 export default function Home() {
   return (
-    <section className="content">
-      <h2>Welcome to Jordi Trejo’s React Site</h2>
-      <p>
-        This is the React-based version of my ITIS 3135 project. It mirrors my original course site,
-        rebuilt using React and Vite for faster and modular development.
-      </p>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/USS_Carl_Vinson_%28CVN-70%29.jpg" alt="Navy ship" className="hero-img" />
-    </section>
+    <div>
+      <h2>Course Homepage</h2>
+      <p>Welcome to ITIS 3135! This is my main course homepage where you can navigate to my other pages.</p>
+      <p>Use the links above to view my Introduction and Course Contract.</p>
+    </div>
   );
 }
