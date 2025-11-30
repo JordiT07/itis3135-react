@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home";
 import Introduction from "./pages/Introduction";
 import Contract from "./pages/Contract";
+import Students from "./pages/Students";
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
               <li><Link to="/">Home</Link></li>
               <li><Link to="/introduction">Introduction</Link></li>
               <li><Link to="/contract">Contract</Link></li>
+              <li><Link to="/students">Students</Link></li>
             </ul>
           </nav>
         </header>
@@ -23,6 +25,7 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/introduction" element={<Introduction />} />
             <Route path="/contract" element={<Contract />} />
+            <Route path="/students" element={<Students />} />
           </Routes>
         </main>
 
