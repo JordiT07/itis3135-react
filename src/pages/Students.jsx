@@ -41,34 +41,41 @@ export default function Students() {
           }}
         >
           <h2>
-            {student.firstName ?? "Unknown"} {student.lastName ?? ""}
+            {student.name?.first} {student.name?.last}
           </h2>
 
-          <p><strong>ID:</strong> {student.id ?? "N/A"}</p>
+          <p><strong>ID:</strong> {student.prefix}</p>
 
-          <p><strong>Personal Background:</strong> {student.personalBackground ?? "N/A"}</p>
-          <p><strong>Professional Background:</strong> {student.professionalBackground ?? "N/A"}</p>
-          <p><strong>Academic Background:</strong> {student.academicBackground ?? "N/A"}</p>
-          <p><strong>Course Background:</strong> {student.courseBackground ?? "N/A"}</p>
+          <p><strong>Personal Background:</strong> {student.backgrounds?.personal}</p>
+          <p><strong>Professional Background:</strong> {student.backgrounds?.professional}</p>
+          <p><strong>Academic Background:</strong> {student.backgrounds?.academic}</p>
+          <p><strong>Course Background:</strong> {student.backgrounds?.subject}</p>
 
           <p>
             <strong>Platform:</strong>{" "}
-            {typeof student.platform === "object"
-              ? `${student.platform.device} - ${student.platform.os}`
-              : student.platform}
+            {student.platform?.device} - {student.platform?.os}
           </p>
 
           <p><strong>Courses:</strong></p>
           <ul>
-            {(student.courses ?? []).map((c, i) => (
+            {student.courses?.map((c, i) => (
               <li key={i}>
                 {c.dept} {c.num} — {c.name}
               </li>
             ))}
           </ul>
 
-          <p><strong>Interesting Story:</strong> {student.story ?? "N/A"}</p>
-          <p><strong>Something Else:</strong> {student.somethingElse ?? "N/A"}</p>
+          <p><strong>Personal Statement:</strong> {student.personalStatement}</p>
+          <p><strong>Fun Fact:</strong> {student.funFact}</p>
+          <p><strong>Something Else:</strong> {student.additional}</p>
+
+          {student.media?.hasImage && (
+            <img
+              src={`https://dvonb.xyz${student.media.src}`}
+              alt={student.media.caption}
+              style={{ maxWidth: "200px", borderRadius: "10px", marginTop: "10px" }}
+            />
+          )}
         </div>
       ))}
     </div>
