@@ -1,83 +1,220 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Students() {
   const [students, setStudents] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [filtered, setFiltered] = useState([]);
+  const [index, setIndex] = useState(0);
+  const [search, setSearch] = useState("");
 
+  // --- NEW: Checkboxes ---
+  const [filters, setFilters] = useState({
+    name: true,
+    image: true,
+    backgrounds: true,
+    classes: true,
+    extra: true,
+    funfact: true,
+    platform: true,
+    quote: true,
+    links: true
+  });
+
+  // Load student JSON from API
   useEffect(() => {
     fetch("https://dvonb.xyz/api/2025-fall/itis-3135/students?full=1")
-      .then((res) => {
-        if (!res.ok) throw new Error("Network response was not ok");
-        return res.json();
-      })
+      .then((res) => res.json())
       .then((data) => {
         setStudents(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error:", err);
-        setError(err.message);
-        setLoading(false);
+        setFiltered(data);
       });
   }, []);
 
-  if (loading) return <h2>Loading student data...</h2>;
-  if (error) return <h2 style={{ color: "red" }}>Error: {error}</h2>;
+  // Navigation
+  const next = () => {
+    setIndex((index + 1) % filtered.length);
+  };
+
+  const prev = () => {
+    setIndex((index - 1 + filtered.length) % filtered.length);
+  };
+
+  // Search by first+last name
+  const handleSearch = (e) => {
+    const value = e.target.value.toLowerCase();
+    setSearch(value);
+
+    const results = students.filter((s) =>
+      `${s.name?.first} ${s.name?.last}`.toLowerCase().includes(value)
+    );
+
+    setFiltered(results);
+    setIndex(0);
+  };
+
+  // Checkbox handler
+  const handleCheckbox = (e) => {
+    setFilters({
+      ...filters,
+      [e.target.name]: e.target.checked,
+    });
+  };
+
+  if (filtered.length === 0)
+    return <p style={{ textAlign: "center" }}>Loading students...</p>;
+
+  const s = filtered[index];
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>ITIS 3135 Students</h1>
+    <div style={{ maxWidth: "800px", margin: "auto" }}>
+      <h2>Student Directory</h2>
 
-      {students.map((student, index) => (
-        <div
-          key={index}
-          style={{
-            border: "1px solid #ddd",
-            padding: "15px",
-            borderRadius: "10px",
-            marginBottom: "20px",
-            background: "#fafafa",
-          }}
-        >
-          <h2>
-            {student.name?.first} {student.name?.last}
-          </h2>
+      {/* Search */}
+      <input
+        type="text"
+        placeholder="Search by name..."
+        value={search}
+        onChange={handleSearch}
+        style={{
+          width: "100%",
+          padding: "10px",
+          marginBottom: "20px",
+          fontSize: "1rem",
+        }}
+      />
 
-          <p><strong>ID:</strong> {student.prefix}</p>
+      {/* Counter */}
+      <p><strong>{filtered.length}</strong> introductions found</p>
 
-          <p><strong>Personal Background:</strong> {student.backgrounds?.personal}</p>
-          <p><strong>Professional Background:</strong> {student.backgrounds?.professional}</p>
-          <p><strong>Academic Background:</strong> {student.backgrounds?.academic}</p>
-          <p><strong>Course Background:</strong> {student.backgrounds?.subject}</p>
+      {/* NEW: Checkboxes */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(2, 1fr)",
+          gap: "6px",
+          marginBottom: "20px",
+        }}
+      >
+        {Object.keys(filters).map((key) => (
+          <label key={key}>
+            <input
+              type="checkbox"
+              name={key}
+              checked={filters[key]}
+              onChange={handleCheckbox}
+            />{" "}
+            {key.charAt(0).toUpperCase() + key.slice(1)}
+          </label>
+        ))}
+      </div>
 
+      {/* Student Display */}
+      <div
+        style={{
+          border: "1px solid #ccc",
+          padding: "20px",
+          borderRadius: "10px",
+          background: "white",
+        }}
+      >
+        {/* Name */}
+        {filters.name && (
+          <h3>
+            {s.name?.first} {s.name?.last}
+          </h3>
+        )}
+
+        {/* Image */}
+        {filters.image && s.media?.hasImage && (
+          <img
+            src={`https://dvonb.xyz${s.media.src}`}
+            alt={s.media.caption}
+            style={{
+              maxWidth: "200px",
+              borderRadius: "10px",
+              marginBottom: "10px",
+            }}
+          />
+        )}
+
+        {/* Backgrounds */}
+        {filters.backgrounds && (
+          <>
+            <p><strong>Personal Background:</strong> {s.backgrounds?.personal}</p>
+            <p><strong>Professional Background:</strong> {s.backgrounds?.professional}</p>
+            <p><strong>Academic Background:</strong> {s.backgrounds?.academic}</p>
+            <p><strong>Course Background:</strong> {s.backgrounds?.subject}</p>
+          </>
+        )}
+
+        {/* Platform */}
+        {filters.platform && (
           <p>
-            <strong>Platform:</strong>{" "}
-            {student.platform?.device} - {student.platform?.os}
+            <strong>Platform:</strong> {s.platform?.device} — {s.platform?.os}
           </p>
+        )}
 
-          <p><strong>Courses:</strong></p>
-          <ul>
-            {student.courses?.map((c, i) => (
-              <li key={i}>
-                {c.dept} {c.num} — {c.name}
-              </li>
-            ))}
-          </ul>
+        {/* Courses */}
+        {filters.classes && (
+          <>
+            <h4>Courses:</h4>
+            <ul>
+              {s.courses?.map((c, i) => (
+                <li key={i}>
+                  {c.dept} {c.num} — {c.name}
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
 
-          <p><strong>Personal Statement:</strong> {student.personalStatement}</p>
-          <p><strong>Fun Fact:</strong> {student.funFact}</p>
-          <p><strong>Something Else:</strong> {student.additional}</p>
+        {/* Fun fact */}
+        {filters.funfact && <p><strong>Fun Fact:</strong> {s.funFact}</p>}
 
-          {student.media?.hasImage && (
-            <img
-              src={`https://dvonb.xyz${student.media.src}`}
-              alt={student.media.caption}
-              style={{ maxWidth: "200px", borderRadius: "10px", marginTop: "10px" }}
-            />
-          )}
-        </div>
-      ))}
+        {/* Extra info */}
+        {filters.extra && (
+          <p><strong>Something Else:</strong> {s.additional}</p>
+        )}
+
+        {/* Placeholder: API doesn't include a quote field */}
+        {filters.quote && (
+          <blockquote>
+            <em>No quote provided.</em>
+          </blockquote>
+        )}
+
+        {/* Links */}
+        {filters.links && (
+          <div>
+            <strong>Links:</strong>
+            <ul>
+              {s.links?.web && (
+                <li>
+                  <a href={s.links.web} target="_blank">Website</a>
+                </li>
+              )}
+              {s.links?.github && (
+                <li>
+                  <a href={s.links.github} target="_blank">GitHub</a>
+                </li>
+              )}
+            </ul>
+          </div>
+        )}
+      </div>
+
+      {/* Navigation Buttons */}
+      <div style={{ textAlign: "center", marginTop: "20px" }}>
+        <button style={{ padding: "10px 20px", marginRight: "10px" }} onClick={prev}>
+          ⬅ Previous
+        </button>
+        <button style={{ padding: "10px 20px" }} onClick={next}>
+          Next ➡
+        </button>
+      </div>
+
+      <p style={{ textAlign: "center", marginTop: "15px" }}>
+        Showing {index + 1} of {filtered.length}
+      </p>
     </div>
   );
 }
