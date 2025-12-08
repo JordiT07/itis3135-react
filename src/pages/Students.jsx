@@ -124,17 +124,17 @@ export default function Students() {
         )}
 
         {/* Image */}
-        {filters.image && s.media?.hasImage && (
-          <img
-            src={`https://dvonb.xyz${s.media.src}`}
-            alt={s.media.caption}
-            style={{
-              maxWidth: "200px",
-              borderRadius: "10px",
-              marginBottom: "10px",
-            }}
-          />
-        )}
+{filters.image && s.media?.hasImage && (
+  <img
+    src={`https://dvonb.xyz${s.media.src}`}
+    alt={s.media.caption}
+    style={{
+      maxWidth: "200px",
+      borderRadius: "10px",
+      marginBottom: "10px",
+    }}
+  />
+)}
 
         {/* Backgrounds */}
         {filters.backgrounds && (
